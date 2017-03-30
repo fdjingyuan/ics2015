@@ -96,6 +96,26 @@ static int cmd_help(char *args) {
 	return 0;
 }
 
+static int cmd_si(char *args){
+		char *arg=strtok(NULL," ");//split the input string
+		uint32_t n;//the number of the single step
+		if(arg==NULL)//the default is 1 when N is not given
+				cpu_exec(1);
+		else{
+				  if(sscanf(arg,"%u",&n)==0)
+					{
+							printf("Invalid number\n");
+							return 0;
+					}else{
+							cpu_exec(n);
+					}
+		}
+		return 0;
+}
+
+
+
+
 void ui_mainloop() {
 	while(1) {
 		char *str = rl_gets();
