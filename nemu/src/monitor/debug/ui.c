@@ -38,6 +38,20 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args);
+
+static int cmd_info(char *args);
+
+static int cmd_p(char *args);
+
+static int cmd_x(char *args);
+
+static int cmd_w(char *args);
+
+static int cmd_d(char *args);
+
+static int cmd_bt(char *args);
+ 
 static struct {
 	char *name;
 	char *description;
@@ -46,7 +60,13 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
-
+	{ "si", "Single step the instruction", cmd_si },
+  { "info", "Print regInfo or watchPointInfo", cmd_info },
+  { "p", "Caculate and print expresstion", cmd_p },
+	{ "x", "Scan memory", cmd_x },
+	{ "w", "Set new watchpoint", cmd_w },
+	{ "d", "Delete watchpoint", cmd_d },
+	{ "bt", "Display the stack frame chain", cmd_bt },
 	/* TODO: Add more commands */
 
 };
