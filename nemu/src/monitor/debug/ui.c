@@ -36,22 +36,26 @@ static int cmd_q(char *args) {
 	return -1;
 }
 
+//the statement of the command
 static int cmd_help(char *args);
 
 static int cmd_si(char *args);
 
 static int cmd_info(char *args);
 
-static int cmd_p(char *args);
-
+/*statement of other command
 static int cmd_x(char *args);
+
+static int cmd_p(char *args);
 
 static int cmd_w(char *args);
 
 static int cmd_d(char *args);
 
 static int cmd_bt(char *args);
+*/
  
+ //the definition of the cmd_table
 static struct {
 	char *name;
 	char *description;
@@ -61,17 +65,21 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "Single step the instruction", cmd_si },
-  { "info", "Print regInfo or watchPointInfo", cmd_info },
-  { "p", "Caculate and print expresstion", cmd_p },
+	{ "info", "Print regInfo or watchPointInfo", cmd_info },
 	{ "x", "Scan memory", cmd_x },
+	/*other command
+	{ "p", "Caculate and print expresstion", cmd_p },
 	{ "w", "Set new watchpoint", cmd_w },
 	{ "d", "Delete watchpoint", cmd_d },
 	{ "bt", "Display the stack frame chain", cmd_bt },
+	*/
 	/* TODO: Add more commands */
 
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
+
+//realizations of the command
 
 static int cmd_help(char *args) {
 	/* extract the first argument */
@@ -97,15 +105,20 @@ static int cmd_help(char *args) {
 }
 
 static int cmd_si(char *args){
-		char *arg=strtok(NULL," ");//split the input string
-		uint32_t n;//the number of the single step
-		if(arg==NULL)//the default is 1 when N is not given
+		//split the input string
+		char *arg=strtok(NULL," ");
+		//the number of the single step  
+		int n;
+
+		//the default is 1 when N is not given	
+		if(arg==NULL)
 				cpu_exec(1);
 		else{
-				  if(sscanf(arg,"%u",&n)==0)
+				  if(sscanf(arg,"%d",&n)==-1)
+				  //sscanf:if true,return the number of parameters
+					//if false, return -1 
 					{
 							printf("Invalid number\n");
-							return 0;
 					}else{
 							cpu_exec(n);
 					}
@@ -113,9 +126,28 @@ static int cmd_si(char *args){
 		return 0;
 }
 
+static int cmd_info(char *args){
+		char *arg=strtok(NULL," ");
+		//forget to input r or w
+		if(arg==NULL)
+		{
+				printf("please input r or w after info\n");
+				return 0;
+		}
 
+		//print the state of the register
+		if(strcmp(arg,"r")==0)
+		{
+				
+		}
 
+		//print the information of the watchpoint
+		else if(strcmp(arg,"w")==0)
+		{
 
+		}
+
+}
 void ui_mainloop() {
 	while(1) {
 		char *str = rl_gets();
