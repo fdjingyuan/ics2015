@@ -112,17 +112,17 @@ static int cmd_si(char *args){
 
 		//the default is 1 when N is not given	
 		if(arg==NULL)
-				cpu_exec(1);
+		  cpu_exec(1);
 		else{
-				  if(sscanf(arg,"%d",&n)==-1)
-				  //sscanf:if true,return the number of parameters
-					//if false, return -1 
-					{
-							printf("Invalid number\n");
+		  if(sscanf(arg,"%d",&n)==-1)
+		  //sscanf:if true,return the number of parameters
+		  //if false, return -1 
+				  {
+						printf("Invalid number\n");
 					}else{
-							cpu_exec(n);
+						cpu_exec(n);
 					}
-		}
+				}
 		return 0;
 }
 
@@ -131,14 +131,25 @@ static int cmd_info(char *args){
 		//forget to input r or w
 		if(arg==NULL)
 		{
-				printf("please input r or w after info\n");
-				return 0;
+		  printf("please input r or w after info\n");
+		  return 0;
 		}
 
 		//print the state of the register
 		if(strcmp(arg,"r")==0)
 		{
-				
+			int i;
+			//eip
+			printf("eip\t%x\n",cpu.eip);
+			//32bit register
+			for(i=0;i<8;i++){
+				printf("%s:\t0x%x\t%d\n",regsl[i],reg_l(i),reg_l(i));}
+		  //16bit register
+			for(i=0;i<8;i++){
+				printf("%s:\t0x%x\t%d\n",regsw[i],reg_w(i),reg_w(i));}
+		  //8bit register
+			for(i=0;i<8;i++){
+		    printf("%s:\t0x%x\t%d\n",regsb[i],reg_b(i),reg_b(i));}			
 		}
 
 		//print the information of the watchpoint
