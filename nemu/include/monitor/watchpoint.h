@@ -13,8 +13,9 @@ typedef struct watchpoint {
 } WP;
 	//statement:the implement function of watchpoint
 	//realizing in watchpoint.c
-	WP *head;
-	WP *new_wp();
-	void free_wp(WP *wp);
-
+	/*
+	WP* head;
+	WP* new_wp();
+	void free_wp(WP* wp);
+	*/
 #endif

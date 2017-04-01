@@ -65,7 +65,7 @@ static struct {
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "Single step the instruction", cmd_si },
 	{ "info", "Print regInfo or watchPointInfo", cmd_info },
-	{ "x", "Scan memory", cmd_x },
+	//{ "x", "Scan memory", cmd_x },
 	/*other command
 	{ "p", "Caculate and print expresstion", cmd_p },
 	{ "w", "Set new watchpoint", cmd_w },
@@ -151,7 +151,6 @@ static int cmd_info(char *args){
 		    printf("%s:\t0x%x\t%d\t",regsb[i|4],reg_b(i|4),reg_b(i|4));
 				printf("%s:\t0x%x\t%d\n",regsb[i],reg_b(i),reg_b(i));}			
 		}
-
 		/*//print the information of the watchpoint
 		else if(strcmp(arg,"w")==0)
 		{
@@ -162,7 +161,10 @@ static int cmd_info(char *args){
 			}
 		}*/
 		else 
+		{		  
 		  printf("Invalid Instruction\n");
+		}
+	return 0;
 }
 
 
