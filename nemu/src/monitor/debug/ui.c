@@ -117,11 +117,8 @@ static int cmd_si(char *args){
 		  //sscanf:if true,return the number of parameters
 				printf("Invalid number\n");
 		  }
-			else if(n<=0){
-				printf("Please input a positive number\n");
-			}
 		  else if(n>10){
-				printf("the single step cannot exceed 10\n");
+				printf("the single step cannot exceed 10");
 			}
 			else{
 				cpu_exec(n);
@@ -148,10 +145,12 @@ static int cmd_info(char *args){
 			//32bit register
 			for(i=0;i<8;i++){
 				printf("%s:\t0x%x\t%d\n",regsl[i],reg_l(i),reg_l(i));}
-		  //16bit register
+		  printf("\n");
+			//16bit register
 			for(i=0;i<8;i++){
 				printf("%s:\t0x%x\t%d\n",regsw[i],reg_w(i),reg_w(i));}
-		  //8bit register
+		  printf("\n");
+			//8bit register
 			for(i=0;i<4;i++){
 		    printf("%s:\t0x%x\t%d\t",regsb[i|4],reg_b(i|4),reg_b(i|4));
 				printf("%s:\t0x%x\t%d\n",regsb[i],reg_b(i),reg_b(i));}			
