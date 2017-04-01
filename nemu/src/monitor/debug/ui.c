@@ -198,7 +198,7 @@ static int cmd_x(char* args){
 			sscanf(addr,"%x",&start_addr);
 			int i;
 			for(i=0;i<ins;i++){
-				printf("%d\t0x%x:0x%x\n",i+1,start_addr,swaddr_read(start_addr,4));
+				printf("%d\t0x%08x:0x%08x\n",i+1,start_addr,swaddr_read(start_addr,4));
 				start_addr+=4;
 			}
 		}
