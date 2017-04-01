@@ -155,9 +155,16 @@ static int cmd_info(char *args){
 		//print the information of the watchpoint
 		else if(strcmp(arg,"w")==0)
 		{
-
+		  WP* pHead=head;
+			while(pHead!=NULL){
+				//!ATTENTION:can printf more information in the future
+				printf("watchpoint NO.%d, expr is %s\n",pHead->NO,pHead->str)
+				pHead=pHead->next;
+			}
 		}
-
+		else 
+		  printf("Invalid Instruction\n");
+		return 0;
 }
 void ui_mainloop() {
 	while(1) {
