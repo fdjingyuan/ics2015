@@ -43,9 +43,8 @@ static int cmd_si(char *args);
 
 static int cmd_info(char *args);
 
+//static int cmd_x(char *args);
 /*statement of other command
-static int cmd_x(char *args);
-
 static int cmd_p(char *args);
 
 static int cmd_w(char *args);
@@ -148,24 +147,25 @@ static int cmd_info(char *args){
 			for(i=0;i<8;i++){
 				printf("%s:\t0x%x\t%d\n",regsw[i],reg_w(i),reg_w(i));}
 		  //8bit register
-			for(i=0;i<8;i++){
-		    printf("%s:\t0x%x\t%d\n",regsb[i],reg_b(i),reg_b(i));}			
+			for(i=0;i<4;i++){
+		    printf("%s:\t0x%x\t%d\t",regsb[i|4],reg_b(i|4),reg_b(i|4));
+				printf("%s:\t0x%x\t%d\n",regsb[i],reg_b(i),reg_b(i));}			
 		}
 
-		//print the information of the watchpoint
+		/*//print the information of the watchpoint
 		else if(strcmp(arg,"w")==0)
 		{
 		  WP* pHead=head;
 			while(pHead!=NULL){
-				//!ATTENTION:can printf more information in the future
 				printf("watchpoint NO.%d, expr is %s\n",pHead->NO,pHead->str)
 				pHead=pHead->next;
 			}
-		}
+		}*/
 		else 
 		  printf("Invalid Instruction\n");
-		return 0;
 }
+
+
 void ui_mainloop() {
 	while(1) {
 		char *str = rl_gets();
