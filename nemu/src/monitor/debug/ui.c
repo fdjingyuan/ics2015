@@ -117,8 +117,11 @@ static int cmd_si(char *args){
 		  //sscanf:if true,return the number of parameters
 				printf("Invalid number\n");
 		  }
+			else if(n<=0){
+				printf("Please input a positive number\n");
+			}
 		  else if(n>10){
-				printf("the single step cannot exceed 10");
+				printf("the single step cannot exceed 10\n");
 			}
 			else{
 				cpu_exec(n);
