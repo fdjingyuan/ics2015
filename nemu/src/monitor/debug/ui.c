@@ -113,15 +113,17 @@ static int cmd_si(char *args){
 		if(arg==NULL)
 		  cpu_exec(1);
 		else{
-		  if(sscanf(arg,"%d",&n)==-1)
+		  if(sscanf(arg,"%d",&n)==0){
 		  //sscanf:if true,return the number of parameters
-		  //if false, return -1 
-				  {
-						printf("Invalid number\n");
-					}else{
-						cpu_exec(n);
-					}
-				}
+				printf("Invalid number\n");
+		  }
+		  else if(n>10){
+				printf("the single step cannot exceed 10");
+			}
+			else{
+				cpu_exec(n);
+		  }
+  }
 		return 0;
 }
 
