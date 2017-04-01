@@ -148,12 +148,12 @@ static int cmd_info(char *args){
 		  printf("\n");
 			//16bit register
 			for(i=0;i<8;i++){
-				printf("%s:\t0x%x\t%d\n",regsw[i],reg_w(i),reg_w(i));}
+				printf("%s:\t0x%#x\t%d\n",regsw[i],reg_w(i),reg_w(i));}
 		  printf("\n");
 			//8bit register
 			for(i=0;i<4;i++){
-		    printf("%s:\t0x%x\t%d\t",regsb[i|4],reg_b(i|4),reg_b(i|4));
-				printf("%s:\t0x%x\t%d\n",regsb[i],reg_b(i),reg_b(i));}			
+		    printf("%s:\t0x%#x\t%d\t",regsb[i|4],reg_b(i|4),reg_b(i|4));
+				printf("%s:\t0x%#x\t%d\n",regsb[i],reg_b(i),reg_b(i));}			
 		}
 		/*//print the information of the watchpoint
 		else if(strcmp(arg,"w")==0)
@@ -170,7 +170,17 @@ static int cmd_info(char *args){
 		}
 	return 0;
 }
+/*
+static int cmd_x(char* args){
 
+
+
+
+
+
+
+
+}*/
 
 void ui_mainloop() {
 	while(1) {
