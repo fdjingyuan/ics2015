@@ -7,7 +7,7 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ
+	NOTYPE = 256, EQ, NEQ, AND, OR, DEREF, REG, INT_d, INT_x
 
 	/* TODO: Add more token types */
 
@@ -24,7 +24,20 @@ static struct rule {
 
 	{" +",	NOTYPE},				// spaces
 	{"\\+", '+'},					// plus
-	{"==", EQ}						// equal
+	{"==", EQ},					// equal
+	{"!=", NEQ},
+	{"-", '-'},					//subtract or negative 
+	{"\\*", '*'},					//mutiply or address
+	{"/", '/'},					//divide
+	{"&&", AND},
+	{"\\|\\|", OR},
+	{"!", '!'},
+	{"\\(", '('},
+	{"\\)", ')'},
+	{"\\$[a-z]+", REG},				//register	eg:$eax
+	{"[0-9]+", INT_d},				//decimal number
+	{"0[xX][0-9a-fA-F]+", INT_x}			//hexadecimal number
+
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -49,13 +62,16 @@ void init_regex() {
 }
 
 typedef struct token {
-	int type;
-	char str[32];
+	int type;//record the type of token
+	char str[32];//record the corresponding substring of token
 } Token;
 
+//the array is to store the information of token that has been recognized in order
 Token tokens[32];
+//indicates the number of tokens that have been identified 
 int nr_token;
 
+//to identify the token in expression
 static bool make_token(char *e) {
 	int position = 0;
 	int i;
