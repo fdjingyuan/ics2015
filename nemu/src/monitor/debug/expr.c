@@ -86,7 +86,7 @@ static bool make_token(char *e) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 
-				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
+				//Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 				position += substr_len;
 
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
@@ -95,6 +95,46 @@ static bool make_token(char *e) {
 				 */
 
 				switch(rules[i].token_type) {
+					case NOTYPE:break;
+					case INT_x:
+						assert(substr_len<32);
+						tokens[nr_token].type = rules[i].token_type;
+						//copy substr_len byte to the memory that tokens indicate
+						memcpy(tokens[nr_token].str,substr_start,substr_len);
+						nr_token++;
+						break;
+					case INT_d:
+						assert(substr_len<32);
+						tokens[nr_token].type = rules[i].token_type;
+						memcpy(tokens[nr_token].str,substr_start,substr_len);
+						nr_token++;
+						break;
+					case REG:
+						tokens[nr_token].type = rules[i].token_type;
+						memcpy(tokens[nr_token].str,substr_start+1,substr_len-1);
+						nr_token++;
+						break;
+					case '*'://determine whether the * represent pointer dereference
+						if(nr_token==0|| (tokens[nr_token-1].type!=INT_d && tokens[nr_token-1].type!=INT_x && tokens[nr_token-1].type!=')'))
+						{
+								tokens[nr_token].type=DEREF;
+								nr_token++;
+								break;
+						}
+					case '+':
+					case '-':
+					case '/':
+					case '(':
+					case ')':
+					case EQ:
+					case NEQ:
+					case AND:
+					case OR:
+					case '!':
+						 tokens[nr_token].type = rules[i].token_type;
+						 nr_token++;
+						 break;
+
 					default: panic("please implement me");
 				}
 
@@ -106,6 +146,7 @@ static bool make_token(char *e) {
 			printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
 			return false;
 		}
+		assert(nr_token<32);//the limit number of token
 	}
 
 	return true; 
