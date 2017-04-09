@@ -42,8 +42,8 @@ static struct rule {
 	{"\\(", '('},
 	{"\\)", ')'},
 	{"\\$[a-z]+", REG},				//register	eg:$eax
-	{"[0-9]+", INT_d},				//decimal number
 	{"0x[0-9a-fA-F]+", INT_x},			//hexadecimal number
+	{"[0-9]+", INT_d},				//decimal number
 
 };
 
