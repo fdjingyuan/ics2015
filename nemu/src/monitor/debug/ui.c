@@ -114,7 +114,8 @@ static int cmd_si(char *args){
 		  cpu_exec(1);
 		else{
 		  if(sscanf(arg,"%d",&n)==0){
-		  //sscanf:if true,return the number of parameters
+		  //int sscanf(const char*buffer, const char*format, [argument]...)  
+		  //if false,return 0
 				printf("Invalid number\n");
 		  }
 			else if(n<=0){
@@ -142,7 +143,7 @@ static int cmd_info(char *args){
 		}
 
 		//print the state of the register
-		if(strcmp(arg,"r")==0)
+		if(strcmp(arg,"r")==0)//equal:return 0;<:return negative number;>:return positive number
 		{
 			int i;
 			//eip
