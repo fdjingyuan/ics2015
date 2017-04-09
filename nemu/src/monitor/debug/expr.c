@@ -43,7 +43,7 @@ static struct rule {
 	{"\\)", ')'},
 	{"\\$[a-z]+", REG},				//register	eg:$eax
 	{"[0-9]+", INT_d},				//decimal number
-	{"0x[0-9a-fA-F]+", INT_x}			//hexadecimal number
+	{"0[xX][0-9a-fA-F]+", INT_x},			//hexadecimal number
 
 };
 
@@ -102,7 +102,7 @@ static bool make_token(char *e) {
 				
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
-				printf("start=%c,len=%d\n",*substr_start,substr_len);
+				//debug:printf("start=%c,len=%d\n",*substr_start,substr_len);
 
 				//Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 				position += substr_len;
@@ -118,14 +118,14 @@ static bool make_token(char *e) {
 						tokens[nr_token].type = rules[i].token_type;
 						//copy substr_len byte to the memory that tokens indicate
 						memcpy(tokens[nr_token].str,substr_start,substr_len);
-						printf("tokens[nr_token].str=%s",tokens[nr_token].str);
+						//debug:printf("tokens[nr_token].str=%s",tokens[nr_token].str);
 						nr_token++;
 						break;
 					case INT_d:
 						assert(substr_len<32);
 						tokens[nr_token].type = rules[i].token_type;
 						memcpy(tokens[nr_token].str,substr_start,substr_len);
-						printf("tokens[nr_token].str=%s",tokens[nr_token].str);
+						//debug:printf("tokens[nr_token].str=%s",tokens[nr_token].str);
 						nr_token++;
 						break;
 					case REG:
