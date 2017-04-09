@@ -124,6 +124,7 @@ static bool make_token(char *e) {
 						assert(substr_len<32);
 						tokens[nr_token].type = rules[i].token_type;
 						memcpy(tokens[nr_token].str,substr_start,substr_len);
+						printf("tokens[nr_token].str=%s",tokens[nr_token].str);
 						nr_token++;
 						break;
 					case REG:
