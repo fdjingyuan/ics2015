@@ -194,7 +194,7 @@ uint32_t eval(uint32_t p,uint32_t q){
 	{
 		uint32_t n;
 		if(tokens[q].type==INT_x)
-			return strtoull(tokens[q].str,NULL,16);
+			n = strtoull(tokens[q].str,NULL,16);
 		else if(tokens[q].type==INT_d) 
 			sscanf(tokens[q].str, "%d", &n);
 		else
