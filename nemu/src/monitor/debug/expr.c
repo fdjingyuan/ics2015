@@ -1,10 +1,11 @@
 #include "nemu.h"
-
+#include "common.h"
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <sys/types.h>
 #include <regex.h>
+#include <stdlib.h>
 
 enum {
 	NOTYPE = 256, 
@@ -193,7 +194,7 @@ uint32_t eval(uint32_t p,uint32_t q){
 	{
 		uint32_t n;
 		if(tokens[q].type==INT_x)
-			sscanf(tokens[q].str, "%x", &n);
+			return strtoull(tokens[q].str,NULL,16);
 		else if(tokens[q].type==INT_d) 
 			sscanf(tokens[q].str, "%d", &n);
 		else
