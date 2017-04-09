@@ -117,6 +117,7 @@ static bool make_token(char *e) {
 						tokens[nr_token].type = rules[i].token_type;
 						//copy substr_len byte to the memory that tokens indicate
 						memcpy(tokens[nr_token].str,substr_start,substr_len);
+						printf("tokens[nr_token].str=%s",tokens[nr_token].str);
 						nr_token++;
 						break;
 					case INT_d:
