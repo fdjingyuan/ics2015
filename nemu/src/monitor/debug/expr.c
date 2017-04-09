@@ -11,7 +11,7 @@ enum {
 	NOTYPE = 256, 
 	EQ,NEQ, AND, OR, 
 	DEREF,NEG,NOT,
-	REG, INT_d, INT_x
+	REG, INT_d, INT_x,
 
 
 	/* TODO: Add more token types */
