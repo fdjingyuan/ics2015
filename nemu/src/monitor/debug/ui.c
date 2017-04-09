@@ -44,9 +44,9 @@ static int cmd_si(char *args);
 static int cmd_info(char *args);
 
 static int cmd_x(char *args);
-/*statement of other command
-static int cmd_p(char *args);
 
+static int cmd_p(char *args);
+/*statement of other command
 static int cmd_w(char *args);
 
 static int cmd_d(char *args);
@@ -66,8 +66,8 @@ static struct {
 	{ "si", "Single step the instruction", cmd_si },
 	{ "info", "Print regInfo or watchPointInfo", cmd_info },
 	{ "x", "Scan memory", cmd_x },
-	/*other command
 	{ "p", "Caculate and print expresstion", cmd_p },
+	/*other command
 	{ "w", "Set new watchpoint", cmd_w },
 	{ "d", "Delete watchpoint", cmd_d },
 	{ "bt", "Display the stack frame chain", cmd_bt },
@@ -206,6 +206,17 @@ static int cmd_x(char* args){
 	}
 	return 0;
 }
+
+static int cmd_p(char* args){
+	char* arg = strtok(NULL," ");
+	bool succ=true;
+	bool* psucc=&succ;
+	printf("%s=%u\n",arg,expr(arg,psucc));
+	return 0;
+}
+
+
+
 
 void ui_mainloop() {
 	while(1) {
