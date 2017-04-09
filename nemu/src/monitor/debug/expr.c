@@ -213,12 +213,14 @@ uint32_t eval(uint32_t p,uint32_t q){
 	//the expression is surrounded by a matched pair of parentheses
 	else if(check_parentheses(p,q) == true)
 		return eval(p+1,q-1);//just throw the parentheses
-	//NOR
-	else if(tokens[p].type == '!')
-		return !eval(++p,q);//after finishing,p++
+	else if(tokens[p].type == NEG)
+		return -eval(p+1,q);
+	//NOT
+	else if(tokens[p].type == NOT)
+		return !eval(p+1,q);
 	//*:extract contents that the pointer point to 
 	else if(tokens[p].type == DEREF)
-		return swaddr_read(eval(++p,q),4);
+		return swaddr_read(eval(p+1,q),4);
 	//general caculation:using recursive caculation
 	else
 	{
