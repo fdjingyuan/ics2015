@@ -42,6 +42,7 @@ static struct rule {
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
 
+//regex_t is a structure data type which is used to store the compiled regular expression
 static regex_t re[NR_REGEX];
 
 /* Rules are used for many times.
@@ -49,13 +50,18 @@ static regex_t re[NR_REGEX];
  */
 void init_regex() {
 	int i;
-	char error_msg[128];
+	char error_msg[128];//store the mistaken information
 	int ret;
 
 	for(i = 0; i < NR_REGEX; i ++) {
-		ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
+		//int regcomp(regex_t *compiled,const char*pattern, int cflags)
+		//function:compile the specified regular expression "pattern" to a data formate "complied"
+		ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);//if true, return 0
 		if(ret != 0) {
+			//when regcomp or regexec makes mistakes, use regerror to return a string consists of mistaken information
+			//size_t regerrot(int errcode, regex_t*compiled, char*buffer,size_t length)
 			regerror(ret, &re[i], error_msg, 128);
+			//void assert(int expression)
 			Assert(ret == 0, "regex compilation failed: %s\n%s", error_msg, rules[i].regex);
 		}
 	}
@@ -111,6 +117,7 @@ static bool make_token(char *e) {
 						break;
 					case REG:
 						tokens[nr_token].type = rules[i].token_type;
+						//remove $
 						memcpy(tokens[nr_token].str,substr_start+1,substr_len-1);
 						nr_token++;
 						break;
@@ -143,7 +150,7 @@ static bool make_token(char *e) {
 		}
 
 		if(i == NR_REGEX) {
-			printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+			printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");//???
 			return false;
 		}
 		assert(nr_token<32);//the limit number of token
@@ -159,7 +166,81 @@ uint32_t expr(char *e, bool *success) {
 	}
 
 	/* TODO: Insert codes to evaluate the expression. */
-	panic("please implement me");
-	return 0;
+	return eval(0,nr_token-1);
 }
+
+uint32_t eval(uint32_t p,uint32_t q){
+	if (p>q)
+		assert(0);//bad expression
+
+	//single token:return the value of the number
+	else if(p==q)
+	{
+		uint32_t n;
+		if(tokens[q].type==INT_x)
+			sscanf(tokens[q].str, "%x", &n);
+		else if(tokens[q].type==INT_d) 
+			sscanf(tokens[q].str, "%d", &n);
+		else
+		{
+			int i=0;
+			for(;i<8;i++)
+			{
+				if(strcmp(*(regsl+i),tokens[q].str)==0)
+				{
+					return reg_l(i);
+				}
+			}
+			panic("error:reg cannot be find ");
+		}
+		return n;
+	}
+	//the expression is surrounded by a matched pair of parentheses
+	else if(check_parenthese(p,q) == true)
+		return eval(p+1,q-1);//just throw the parentheses
+	//NOR
+	else if(tokens[p].type == '!')
+		return !eval(++p,q);//after finishing,p++
+	//*:extract contents that the pointer point to 
+	else if(tokens[p].type == DEREF)
+		return swaddr_read(eval(++p,q),4);
+	//general caculation:using recursive caculation
+	else
+		{
+
+
+
+
+
+
+
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
