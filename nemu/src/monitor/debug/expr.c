@@ -98,12 +98,12 @@ static bool make_token(char *e) {
 	while(e[position] != '\0') {
 		/* Try all rules one by one. */
 		for(i = 0; i < NR_REGEX; i ++) {
-				printf("i=%d,NR_REGEX=%lu\n",i,NR_REGEX);
+				//debug:printf("i=%d,NR_REGEX=%lu\n",i,NR_REGEX);
 			if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
 				
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
-				printf("start=%c,len=%d\n",*substr_start,substr_len);
+				//debug:printf("start=%c,len=%d\n",*substr_start,substr_len);
 
 				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 				position += substr_len;
@@ -119,7 +119,7 @@ static bool make_token(char *e) {
 						tokens[nr_token].type = rules[i].token_type;
 						//copy substr_len byte to the memory that tokens indicate
 						memcpy(tokens[nr_token].str,substr_start,substr_len);
-						printf("tokens[nr_token].str=%s",tokens[nr_token].str);
+						//debug:printf("tokens[nr_token].str=%s",tokens[nr_token].str);
 						nr_token++;
 						break;
 					case INT_d:
