@@ -237,8 +237,15 @@ static int cmd_w(char* args){
 static int cmd_d(char* args){
 	char* arg=strtok(NULL," ");
 	int NO;
-	if(arg==NULL)
-		printf("please input number\n");
+	if(arg==NULL){//delete all watchpoint
+		WP* temp=head;
+			while(temp!=NULL)
+			{
+				free_wp(temp);
+				printf("watchpoint NO:%d has been deleted\n",temp->NO);
+				temp=temp->next;
+			}
+	}
 	else{
 		if(sscanf(arg,"%d",&NO)==0)
 			printf("please input correct number\n");
