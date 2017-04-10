@@ -83,11 +83,14 @@ void cpu_exec(volatile uint32_t n) {
 			
 			if(expr(pHead->str,psucc)!=pHead->result)
 			{
-				pHead->result=expr(pHead->str,psucc);
-				nemu_state=STOP;				
-				printf("watchpoint NO:%d has been triggered,expr:%s=%u\n",pHead->NO,pHead->str,pHead->result);
+				if(nemu_state!=RUNNING) return;
+				if(nemu_state==RUNNING){
+					pHead->result=expr(pHead->str,psucc);
+					nemu_state=STOP;				
+					printf("watchpoint NO:%d has been triggered,expr:%s=%u\n",pHead->NO,pHead->str,pHead->result);
+				}
 			}
-			pHead=pHead->next;
+			else pHead=pHead->next;
 		}
 		if(nemu_state != RUNNING) { return; }
 
