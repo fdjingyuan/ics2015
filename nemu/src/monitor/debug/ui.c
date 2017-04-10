@@ -282,6 +282,7 @@ static int cmd_b(char* args){
 		WP* pHead=new_wp();
 		char *eip="$eip==";	
 		strcat(eip,arg);
+		printf("expr:%s",eip);
 		pHead->result=expr(eip,psucc);
 		printf("Set breakpoint NO:%d, expr:%s=0x%x\n",pHead->NO,pHead->str,pHead->result);
 	}
