@@ -93,8 +93,8 @@ void cpu_exec(volatile uint32_t n) {
 					}
 					else
 					{	
-						char *addr;
-						strcpy(addr,pHead->str +6);
+						char *addr=strtok(pHead->str,"==");
+						addr=strtok(NULL," ");
 						printf("breakpoint NO:%d has been triggered at %s\n",pHead->NO,addr);
 					}
 				}
