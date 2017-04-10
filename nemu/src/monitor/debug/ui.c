@@ -167,7 +167,7 @@ static int cmd_info(char *args){
 			if(pHead==NULL)
 				printf("No watchpoint now!You can add one.\n");
 			while(pHead!=NULL){
-				printf("watchpoint NO.%d, expr: %s=%u\n",pHead->NO,pHead->str,expr(pHead->str,psucc));
+				printf("watchpoint NO.%d, expr: %s=%u\t0x%x\n",pHead->NO,pHead->str,expr(pHead->str,psucc),expr(pHead->str,psucc));
 				pHead=pHead->next;
 			}
 		}
@@ -229,7 +229,7 @@ static int cmd_w(char* args){
 		WP* pHead=new_wp();
 		pHead->result=expr(arg,psucc);
 		strcpy(pHead->str,arg);
-		printf("Set watchpoint NO:%d, expr:%s=%u\n",pHead->NO,pHead->str,pHead->result);
+		printf("Set watchpoint NO:%d, expr:%s=%u\t0x%x\n",pHead->NO,pHead->str,pHead->result,pHead->result);
 	}
 	return 0;
 }
