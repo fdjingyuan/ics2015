@@ -1,5 +1,6 @@
 #include "monitor/monitor.h"
 #include "monitor/expr.h"
+#include "cpu/reg.h"
 #include "monitor/watchpoint.h"
 #include "nemu.h"
 
@@ -46,13 +47,13 @@ static int cmd_info(char *args);
 static int cmd_x(char *args);
 
 static int cmd_p(char *args);
-/*statement of other command
+
 static int cmd_w(char *args);
 
 static int cmd_d(char *args);
 
-static int cmd_bt(char *args);
-*/
+//static int cmd_b(char *args);
+
  
  //the definition of the cmd_table
 static struct {
@@ -67,11 +68,9 @@ static struct {
 	{ "info", "Print regInfo or watchPointInfo", cmd_info },
 	{ "x", "Scan memory", cmd_x },
 	{ "p", "Caculate and print expresstion", cmd_p },
-	/*other command
 	{ "w", "Set new watchpoint", cmd_w },
 	{ "d", "Delete watchpoint", cmd_d },
-	{ "bt", "Display the stack frame chain", cmd_bt },
-	*/
+	//{ "b", "Set new breakpoint", cmd_b },
 	/* TODO: Add more commands */
 
 };
@@ -114,8 +113,6 @@ static int cmd_si(char *args){
 		  cpu_exec(1);
 		else{
 		  if(sscanf(arg,"%d",&n)==0){
-		  //int sscanf(const char*buffer, const char*format, [argument]...)  
-		  //if false,return 0
 				printf("Invalid number\n");
 		  }
 			else if(n<=0){
@@ -161,19 +158,21 @@ static int cmd_info(char *args){
 		    printf("%s:\t0x%02x\t%d\t",regsb[i|4],reg_b(i|4),reg_b(i|4));
 				printf("%s:\t0x%02x\t%d\n",regsb[i],reg_b(i),reg_b(i));}			
 		}
-		/*//print the information of the watchpoint
+		//print the information of the watchpoint
 		else if(strcmp(arg,"w")==0)
 		{
-		  WP* pHead=head;
+			bool succ=true;
+			bool* psucc=&succ;		  
+			WP* pHead=head;
+			if(pHead==NULL)
+				printf("No watchpoint now!You can add one.\n");
 			while(pHead!=NULL){
-				printf("watchpoint NO.%d, expr is %s\n",pHead->NO,pHead->str)
+				printf("watchpoint NO.%d, expr: %s=%u\n",pHead->NO,pHead->str,expr(pHead->str,psucc));
 				pHead=pHead->next;
 			}
-		}*/
-		else 
-		{		  
-		  printf("Invalid Instruction\n");
 		}
+		else 		  
+			printf("Invalid Instruction\n");
 	return 0;
 }
 
@@ -195,12 +194,15 @@ static int cmd_x(char* args){
 			return 0;
 		}
 		else{
-			swaddr_t start_addr;
-			sscanf(addr,"%x",&start_addr);
+			bool succ=true;
+			bool* psucc=&succ;
+			swaddr_t expression;
+			expression=expr(addr,psucc);
+			//printf("0x%08x:\t",expression);
 			int i;
 			for(i=0;i<ins;i++){
-				printf("%d\t0x%08x:0x%08x\n",i+1,start_addr,swaddr_read(start_addr,4));
-				start_addr+=4;
+				printf("%d\t0x%08x:0x%08x\n",i+1,expression,swaddr_read(expression,4));
+				expression+=4;
 			}
 		}
 	}
@@ -216,6 +218,58 @@ static int cmd_p(char* args){
 }
 
 
+static int cmd_w(char* args){
+	char* arg=strtok(NULL," ");
+	bool succ=true;
+	bool* psucc=&succ;
+	if(arg==NULL)
+		printf("please input the expression\n");
+	else{
+		WP* pHead=new_wp();
+		pHead->result=expr(arg,psucc);
+		strcpy(pHead->str,arg);
+		printf("Set watchpoint NO:%d, expr:%s=%u\n",pHead->NO,pHead->str,pHead->result);
+	}
+	return 0;
+}
+
+static int cmd_d(char* args){
+	char* arg=strtok(NULL," ");
+	int NO;
+	if(arg==NULL)
+		printf("please input number\n");
+	else{
+		if(sscanf(arg,"%d",&NO)==0)
+			printf("please input correct number\n");
+		else{
+			WP* temp=head;
+			while(temp!=NULL)
+			{
+				if(temp->NO==NO)
+				{
+					free_wp(temp);
+					printf("watchpoint NO:%d has been deleted\n",temp->NO);
+					break;
+				}
+				temp=temp->next;
+			}
+			if(temp==NULL)
+				printf("don't have NO:%d in watchpoint pool\n",NO);
+		}
+	}
+	
+	return 0;
+}
+
+/*
+static int cmd_b(char* args){
+	char* arg=strtok(NULL," ");
+	
+
+
+	
+	return 0;
+}*/
 
 
 void ui_mainloop() {
