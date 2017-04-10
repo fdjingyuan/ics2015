@@ -52,7 +52,7 @@ static int cmd_w(char *args);
 
 static int cmd_d(char *args);
 
-//static int cmd_b(char *args);
+static int cmd_b(char *args);
 
  
  //the definition of the cmd_table
@@ -70,7 +70,7 @@ static struct {
 	{ "p", "Caculate and print expresstion", cmd_p },
 	{ "w", "Set new watchpoint", cmd_w },
 	{ "d", "Delete watchpoint", cmd_d },
-	//{ "b", "Set new breakpoint", cmd_b },
+	{ "b", "Set new breakpoint", cmd_b },
 	/* TODO: Add more commands */
 
 };
@@ -245,6 +245,7 @@ static int cmd_d(char* args){
 				printf("watchpoint NO:%d has been deleted\n",temp->NO);
 				temp=temp->next;
 			}
+		printf("all watchpoint has been deleted\n");
 	}
 	else{
 		if(sscanf(arg,"%d",&NO)==0)
@@ -269,15 +270,24 @@ static int cmd_d(char* args){
 	return 0;
 }
 
-/*
+
 static int cmd_b(char* args){
 	char* arg=strtok(NULL," ");
-	
-
-
+	bool succ=true;
+	bool* psucc=&succ;
+	if(arg==NULL)
+		printf("please input address.\n");
+	else
+	{
+		WP* pHead=new_wp();
+		char *eip="$eip==";	
+		strcat(eip,arg);
+		pHead->result=expr(eip,psucc);
+		printf("Set breakpoint NO:%d, expr:%s=0x%x\n",pHead->NO,pHead->str,pHead->result);
+	}
 	
 	return 0;
-}*/
+}
 
 
 void ui_mainloop() {
