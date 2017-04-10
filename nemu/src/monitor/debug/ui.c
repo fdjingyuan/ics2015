@@ -167,7 +167,7 @@ static int cmd_info(char *args){
 			if(pHead==NULL)
 				printf("No watchpoint now!You can add one.\n");
 			while(pHead!=NULL){
-				printf("watchpoint NO.%d, expr: %s=%u\t0x%x\n",pHead->NO,pHead->str,expr(pHead->str,psucc),expr(pHead->str,psucc));
+				printf("%s NO.%d, expr: %s=%u\t0x%x\n",pHead->type,pHead->NO,pHead->str,expr(pHead->str,psucc),expr(pHead->str,psucc));
 				pHead=pHead->next;
 			}
 		}
