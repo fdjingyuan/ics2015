@@ -203,6 +203,8 @@ uint32_t eval(uint32_t p,uint32_t q){
 			sscanf(tokens[q].str, "%d", &n);
 		else
 		{
+			if(strcmp("eip",tokens[q].str)==0)
+				return cpu.eip;
 			int i=0;
 			for(;i<8;i++)
 			{
