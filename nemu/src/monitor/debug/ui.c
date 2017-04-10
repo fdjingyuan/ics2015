@@ -284,7 +284,6 @@ static int cmd_b(char* args){
 		char *str=malloc(strlen(eip)+strlen(arg));
 		strcpy(str,eip);	
 		strcat(str,arg);
-		//printf("expr:%s",str);
 		pHead->result=expr(str,psucc);
 		printf("Set breakpoint NO:%d at %s\n",pHead->NO,arg);
 	}

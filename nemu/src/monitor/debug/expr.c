@@ -213,7 +213,7 @@ uint32_t eval(uint32_t p,uint32_t q){
 					return reg_l(i);
 				}
 			}
-			panic("error:reg cannot be find ");
+			panic("error:reg cannot be find\n");
 		}
 		return n;
 	}
