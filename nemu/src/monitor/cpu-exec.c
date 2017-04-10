@@ -93,9 +93,7 @@ void cpu_exec(volatile uint32_t n) {
 					}
 					else
 					{	
-						char *addr=strtok(pHead->str,"==");
-						addr=strtok(NULL," ");
-						printf("breakpoint NO:%d has been triggered at %s\n",pHead->NO,addr);
+						printf("breakpoint NO:%d has been triggered at %s\n",pHead->NO,pHead->str +6);
 					}
 				}
 			}
