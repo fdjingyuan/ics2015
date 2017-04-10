@@ -229,6 +229,7 @@ static int cmd_w(char* args){
 		WP* pHead=new_wp();
 		pHead->result=expr(arg,psucc);
 		strcpy(pHead->str,arg);
+		strcpy(pHead->type,"watchpoint");
 		printf("Set watchpoint NO:%d, expr:%s=%u\t0x%x\n",pHead->NO,pHead->str,pHead->result,pHead->result);
 	}
 	return 0;
@@ -286,6 +287,7 @@ static int cmd_b(char* args){
 		strcat(str,arg);
 		strcpy(pHead->str,str);
 		pHead->result=expr(str,psucc);
+		strcpy(pHead->type,"breakpoint");
 		printf("Set breakpoint NO:%d at %s\n",pHead->NO,arg);
 	}
 	

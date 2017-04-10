@@ -86,8 +86,16 @@ void cpu_exec(volatile uint32_t n) {
 				if(nemu_state!=RUNNING) return;
 				if(nemu_state==RUNNING){
 					pHead->result=expr(pHead->str,psucc);
-					nemu_state=STOP;				
-					printf("watchpoint/breakpoint NO:%d has been triggered,expr:%s=%u\n",pHead->NO,pHead->str,pHead->result);
+					nemu_state=STOP;
+					if(strcmp("watchpoint",pHead->type)==0)				
+					{
+						printf("watchpoint NO:%d has been triggered,expr:%s=%u\n",pHead->NO,pHead->str,pHead->result);
+					}
+					else
+					{	
+						char *addr=strtok(pHead->str,"==");
+						printf("breakpoint NO:%d has been triggered at %s\n",pHead->NO,addr);
+					}
 				}
 			}
 			else pHead=pHead->next;
