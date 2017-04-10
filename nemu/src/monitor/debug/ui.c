@@ -286,7 +286,7 @@ static int cmd_b(char* args){
 		strcat(str,arg);
 		//printf("expr:%s",str);
 		pHead->result=expr(str,psucc);
-		printf("Set breakpoint NO:%d, expr:%s=0x%x\n",pHead->NO,pHead->str,pHead->result);
+		printf("Set breakpoint NO:%d at %s\n",pHead->NO,arg);
 	}
 	
 	return 0;

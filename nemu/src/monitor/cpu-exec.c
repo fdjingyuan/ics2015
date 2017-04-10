@@ -81,7 +81,7 @@ void cpu_exec(volatile uint32_t n) {
 		while(pHead!=NULL)
 		{
 			
-			if(expr(pHead->str,psucc)!=pHead->result)
+			if(expr(pHead->str,psucc)!=pHead->result || expr(pHead->str,psucc)==1)
 			{
 				nemu_state=STOP;
 				pHead->result=expr(pHead->str,psucc);
