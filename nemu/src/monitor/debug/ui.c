@@ -213,7 +213,8 @@ static int cmd_p(char* args){
 	char* arg = strtok(NULL," ");
 	bool succ=true;
 	bool* psucc=&succ;
-	printf("%s=%u\n",arg,expr(arg,psucc));
+	uint32_t result=expr(arg,psucc);
+	printf("%s=%u\t0x%x\n",arg,result,result);
 	return 0;
 }
 
