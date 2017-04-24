@@ -146,7 +146,7 @@ static bool make_token(char *e) {
 						if(nr_token==0 || ((tokens[nr_token-1].type!=INT_d) && (tokens[nr_token-1].type!=INT_x) && (tokens[nr_token-1].type!=')')))
 						{
 								tokens[nr_token].type=NEG;
-								printf("token op:%d\n",tokens[nr_token].type);
+								//printf("token op:%d\n",tokens[nr_token].type);
 								nr_token++;
 								break;
 						}	
@@ -160,7 +160,7 @@ static bool make_token(char *e) {
 					case OR:
 					case NOT:
 						 tokens[nr_token].type = rules[i].token_type;
-						printf("token op:%d\n",tokens[nr_token].type);
+						 //printf("token op:%d\n",tokens[nr_token].type);
 						 nr_token++;
 						 break;
 
@@ -222,25 +222,26 @@ uint32_t eval(uint32_t p,uint32_t q){
 	//the expression is surrounded by a matched pair of parentheses
 	else if(check_parentheses(p,q) == true)
 		return eval(p+1,q-1);//just throw the parentheses
-	else if(tokens[p].type == NEG)
-		{
-		printf("p=%d,q=%d,eval=%d\n",p,q,-eval(p+1,q));
-		return -eval(p+1,q);
-	}
-	//NOT
-	else if(tokens[p].type == NOT)
-		return !eval(p+1,q);
-	//*:extract contents that the pointer point to 
-	else if(tokens[p].type == DEREF)
-		return swaddr_read(eval(p+1,q),4);
-	//general caculation:using recursive caculation
 	else
 	{
 		uint32_t op=dominOp(p,q);//get the dominate operator
-		printf("op=%d type=%d\n",op,tokens[op].type);
+		//printf("op=%d type=%d\n",op,tokens[op].type);
+
+		//NEG
+		if(tokens[op].type == NEG)
+		//printf("p=%d,q=%d,eval=%d\n",p,q,-eval(p+1,q));
+			return -eval(p+1,q);
+		//NOT
+		else if(tokens[op].type == NOT)
+			return !eval(p+1,q);
+		//*:extract contents that the pointer point to 
+		else if (tokens[op].type == DEREF)
+			return swaddr_read(eval(p+1,q),4);
+		else{
 		uint32_t val1=eval(p,op-1);
 		uint32_t val2=eval(op+1,q);
-		printf("val1=%d val2=%d\n",val1,val2);
+		//printf("val1=%d val2=%d\n",val1,val2);
+
 
 		switch(tokens[op].type)
 		{
@@ -254,7 +255,9 @@ uint32_t eval(uint32_t p,uint32_t q){
 			case OR:return val1||val2; 
 			default:assert(0);
 		}
+		}
 	}
+
 }
 
 
