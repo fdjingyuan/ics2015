@@ -298,6 +298,14 @@ uint32_t dominOp(uint32_t p, uint32_t q){
 			}
 			p--;
 		}
+		else if(tokens[p].type == NEG)
+		{
+			if(pri<=2)
+			{
+				op=p;
+				pri=2;
+			}
+		}
 		else if(tokens[p].type == '/' || tokens[p].type =='*')
 		{
 			if(pri<=3)
