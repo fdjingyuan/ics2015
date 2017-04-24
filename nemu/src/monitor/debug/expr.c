@@ -146,7 +146,6 @@ static bool make_token(char *e) {
 						if(nr_token==0 || ((tokens[nr_token-1].type!=INT_d) && (tokens[nr_token-1].type!=INT_x) && (tokens[nr_token-1].type!=')')))
 						{
 								tokens[nr_token].type=NEG;
-								printf("%d\n",tokens[nr_token].type);
 								nr_token++;
 								break;
 						}	
@@ -349,7 +348,9 @@ uint32_t dominOp(uint32_t p, uint32_t q){
 			}
 		}
 	}
+	printf("%d %d\n",op,tokens[op].type);
 	return op;
+	
 
 }
 
