@@ -147,7 +147,7 @@ static bool make_token(char *e) {
 						{
 								tokens[nr_token].type=NEG;
 								nr_token++;
-								printf("%d",tokens[nr_token].type);
+								printf("%d\n",tokens[nr_token].type);
 								break;
 						}	
 					case '+':
