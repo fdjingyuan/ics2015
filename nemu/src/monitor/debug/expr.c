@@ -147,7 +147,6 @@ static bool make_token(char *e) {
 						{
 								tokens[nr_token].type=NEG;
 								nr_token++;
-								printf("%d\n",tokens[nr_token].type);
 								break;
 						}	
 					case '+':
@@ -233,6 +232,7 @@ uint32_t eval(uint32_t p,uint32_t q){
 	else
 	{
 		uint32_t op=dominOp(p,q);//get the dominate operator
+		printf("%d or %d\n",op,NEG);
 		uint32_t val1=eval(p,op-1);
 		uint32_t val2=eval(op+1,q);
 
