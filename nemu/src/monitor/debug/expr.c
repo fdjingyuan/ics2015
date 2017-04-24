@@ -234,7 +234,7 @@ uint32_t eval(uint32_t p,uint32_t q){
 		uint32_t op=dominOp(p,q);//get the dominate operator
 		uint32_t val1=eval(p,op-1);
 		uint32_t val2=eval(op+1,q);
-		printf("%d %d\n",val1,val2);
+		printf("val1=%d val2=%d\n",val1,val2);
 
 		switch(tokens[op].type)
 		{
@@ -348,7 +348,7 @@ uint32_t dominOp(uint32_t p, uint32_t q){
 			}
 		}
 	}
-	printf("%d %d\n",op,tokens[op].type);
+	printf("op:%d %d\n",op,tokens[op].type);
 	return op;
 	
 
