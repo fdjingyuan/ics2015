@@ -147,6 +147,7 @@ static bool make_token(char *e) {
 						{
 								tokens[nr_token].type=NEG;
 								nr_token++;
+								printf("%d",tokens[nr_token].type);
 								break;
 						}	
 					case '+':
@@ -275,7 +276,7 @@ bool check_parentheses(uint32_t p,uint32_t q){
 }
 
 uint32_t dominOp(uint32_t p, uint32_t q){
-	//   / *:3; +,-:4; ==,!=:7; &&:11; ||:12; 	
+	//  NEG:2 / *:3; +,-:4; ==,!=:7; &&:11; ||:12; 	
 	int pars=0;
 	int op=p;
 	int pri=0;
