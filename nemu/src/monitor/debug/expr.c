@@ -146,6 +146,7 @@ static bool make_token(char *e) {
 						if(nr_token==0 || ((tokens[nr_token-1].type!=INT_d) && (tokens[nr_token-1].type!=INT_x) && (tokens[nr_token-1].type!=')')))
 						{
 								tokens[nr_token].type=NEG;
+								printf("token op:%d",tokens[nr_token].type);
 								nr_token++;
 								break;
 						}	
@@ -159,6 +160,7 @@ static bool make_token(char *e) {
 					case OR:
 					case NOT:
 						 tokens[nr_token].type = rules[i].token_type;
+						printf("token op:%d",tokens[nr_token].type);
 						 nr_token++;
 						 break;
 
