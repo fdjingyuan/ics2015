@@ -221,7 +221,10 @@ uint32_t eval(uint32_t p,uint32_t q){
 	else if(check_parentheses(p,q) == true)
 		return eval(p+1,q-1);//just throw the parentheses
 	else if(tokens[p].type == NEG)
+		{
+		printf("eval=%d\n",-eval(p+1,q));
 		return -eval(p+1,q);
+	}
 	//NOT
 	else if(tokens[p].type == NOT)
 		return !eval(p+1,q);
