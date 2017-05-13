@@ -13,7 +13,7 @@ static void do_execute(){
 	while(len>=0)
 	{
 		count+=!!(tmp&result);
-		tmp<<1;
+		tmp=tmp<<1;
 		len=len-1;
 	}
 
