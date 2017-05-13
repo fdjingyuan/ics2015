@@ -21,15 +21,29 @@ typedef struct {
 				uint32_t _32;
 				uint16_t _16;
 				uint8_t _8[2];
-		  } gpr[8];
+		     } gpr[8];
 	
 	/* Do NOT change the order of the GPRs' definitions. */
 		
 		struct{
 				uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
-		  };
-  };
+		      };
+              };
 	swaddr_t eip;
+	union
+	{
+		struct
+		{uint32_t
+		CF :1,
+		PF :1,
+		ZF :1,
+		SF :1,
+		IF :1,
+		DF :1,
+		OF :1;
+		};
+	uint32_t EFLAGS;
+	};
 
 } CPU_state;
 
