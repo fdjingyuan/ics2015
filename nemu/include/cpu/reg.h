@@ -30,6 +30,7 @@ typedef struct {
 		      };
               };
 	swaddr_t eip;
+	//flags
 	union
 	{
 		struct
