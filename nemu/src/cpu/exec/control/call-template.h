@@ -2,28 +2,27 @@
 
 #define instr call
 
-static void do_execute(){
-
-	DATA_TYPE_S rel=op_src->val;
-
-	if (DATA_BYTE == 2){
-		//PUSH(IP)
-		REG(R_ESP) -= 2;
-		MEM_W(REG(R_ESP),cpu.eip);
-		//update eip
-		cpu.eip = (cpu.eip +rel) & 0x0000ffff;
-	}
-
-	else{
-		//PUSH(EIP)
-		REG(R_ESP) -= 4;
-		MEM_W(REG(R_ESP),cpu.eip);
-		cpu.eip = cpu.eip +rel;
-	}
-		
-	print_asm_template1();
+make_helper (concat(call_i_, SUFFIX))
+{
+	int len = concat(decode_i_, SUFFIX) (eip + 1);
+	reg_l (R_ESP) -= DATA_BYTE;
+	swaddr_write (reg_l (R_ESP) , 4 , cpu.eip + len);
+	DATA_TYPE_S displacement = op_src->val;
+	print_asm("call %x",cpu.eip + 1 + len + displacement);
+	cpu.eip +=displacement;
+	return len + 1;
+}
+make_helper (concat(call_rm_, SUFFIX))
+{
+	int len = concat(decode_rm_, SUFFIX) (eip + 1);
+	reg_l (R_ESP) -= DATA_BYTE;
+	swaddr_write (reg_l (R_ESP) , 4 , cpu.eip + len);
+	DATA_TYPE_S displacement = op_src->val;
+	print_asm("call %x",displacement);
+	cpu.eip = displacement - len - 1;
+	return len + 1;
 }
 
-make_instr_helper(i);
+
 
 #include "cpu/exec/template-end.h"

@@ -14,6 +14,9 @@
 #include "arith/sub.h"
 #include "arith/cmp.h"
 
+#include "control/call.h"
+#include "control/je.h"
+
 #include "logic/and.h"
 #include "logic/or.h"
 #include "logic/not.h"
@@ -24,9 +27,6 @@
 #include "logic/shrd.h"
 #include "logic/test.h"
 
-
-#include "control/call.h"
-#include "control/je.h"
 
 #include "string/rep.h"
 
