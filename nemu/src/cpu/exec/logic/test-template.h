@@ -3,6 +3,7 @@
 #define instr test
 
 static void do_execute(){
+	//DEST:= LeftSRC AND RightSRC
 	DATA_TYPE result = op_dest->val & op_src->val;
 	int len=(DATA_BYTE<<3)-1;
 	int count=0;
@@ -13,7 +14,8 @@ static void do_execute(){
 		tmp=tmp<<1;
 		len=len-1;
 	}
-
+	
+	//CF=0;OF=0;
 	cpu.CF=0;
 	//PF=1 when the count of 1 is even, PF=0 when the count of 1 is odd	
 	cpu.PF=!(count&0x1);

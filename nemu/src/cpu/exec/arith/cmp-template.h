@@ -3,6 +3,7 @@
 #define instr cmp
 
 static void do_execute(){
+	//LeftSRC - SignExtend(RightSRC)
 	DATA_TYPE result = op_dest->val - op_src->val;
 
 	int len=(DATA_BYTE<<3)-1;
