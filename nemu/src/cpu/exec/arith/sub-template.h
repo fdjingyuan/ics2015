@@ -8,8 +8,8 @@ static void do_execute() {
 	cpu.CF = op_dest->val < op_src->val;
 	cpu.SF=result >> len;
     	int s1,s2;
-	s1=op_dest->val>>len;
-	s2=op_src->val>>len;
+	s1=!!(op_dest->val>>len);
+	s2=!!(op_src->val>>len);
     	cpu.OF=(s1 != s2 && s2 == cpu.SF) ;
     	cpu.ZF=!result;
     	OPERAND_W(op_dest, result);
