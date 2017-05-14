@@ -8,8 +8,11 @@ static void do_execute() {
 	
 	if(op_src->type == OP_TYPE_IMM)
 	{
-		print_asm("jmp %x",cpu.eip + 1 + DATA_BYTE + displacement);
-		cpu.eip +=displacement;
+		if(DATA_BYTE == 4)
+			cpu.eip +=displacement;
+		else
+			cpu.eip=(cpu.eip+displacement) & 0x0000ffff;
+		print_asm("jmp %x",cpu.eip + 1 + DATA_BYTE);
 	}
 	else
 	{
