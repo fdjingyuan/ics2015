@@ -203,20 +203,8 @@ uint32_t eval(uint32_t p,uint32_t q){
 		}
 		if(tokens[q].type==VAR)
 		{
-			int i;
-			for(i=0;i<nr_symtab_enrty;i++)
-			{
-				if((symtab[i].st_info & 0xf)==STT_OBJECT)
-				{
-					char var_name[32];
-					//the length of variable
-					int var_name_len = symtab[i+1].st_name - symtab[i].st_name -1;
-					strncpy (var_name, strtab+symtab[i].st_name, var_name_len);
-					var_name[var_name_len]= '\0';
-					if(strcmp(var_name, tokens[q].str)==0)
-						n = symtab[i].st_value;
-				}
-			}
+			//call function in elf.c
+			n = var_name(tokens[q].str);
 		}
 		return n;//
 	}
