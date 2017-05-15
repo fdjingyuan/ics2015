@@ -63,11 +63,13 @@ static int cmd_p(char *args);
 
 static int cmd_w(char *args);
 
+static int cmd_bt(char *args);
+
 static int cmd_d(char *args);
 
 static int cmd_b(char *args);
 
-static int cmd_bt(char *args);
+
 
  
  //the definition of the cmd_table
@@ -84,9 +86,10 @@ static struct {
 	{ "x", "Scan memory", cmd_x },
 	{ "p", "Caculate and print expresstion", cmd_p },
 	{ "w", "Set new watchpoint", cmd_w },
+	{ "bt", "Print the stack frame chain", cmd_bt},
 	{ "d", "Delete watchpoint", cmd_d },
 	{ "b", "Set new breakpoint", cmd_b },
-	{ "bt", "Print the stack frame chain", cmd_bt},
+	
 	/* TODO: Add more commands */
 
 };
@@ -251,6 +254,46 @@ static int cmd_w(char* args){
 	return 0;
 }
 
+
+static int cmd_bt(char*args){
+	PartOfStackFrame cur_ebp;
+	swaddr_t addr=reg_l(R_EBP);
+	cur_ebp.ret_addr=addr;
+	
+	int j=0;
+	while(addr > 0)
+	{
+		//print the begining address
+		printf("#%d	0x%08x in ",j++, cur_ebp.ret_addr);
+		
+		printf("call flags\n");
+		int flag=search_addr(cur_ebp.ret_addr);
+
+		//read PartofStackFrame member
+		current_sreg = R_SS;
+		printf("current_sreg\n");
+		//read current address
+		cur_ebp.prev_ebp = swaddr_read(addr,4);
+		//read return address
+		cur_ebp.ret_addr = swaddr_read(addr+4,4);
+		int i;
+		//read four parameter
+		for(i=0;i<5;i++)
+		{
+			cur_ebp.args[i] = swaddr_read(addr+8+4*i,4);
+		}
+		printf("read\n");
+		if (flag == 1)
+			printf ("( )\n");
+		else 
+			printf ("( %d , %d , %d , %d )\n", cur_ebp.args[0],cur_ebp.args[1],cur_ebp.args[2],cur_ebp.args[3]);
+		printf("printf\n");
+		addr = cur_ebp.prev_ebp;
+	}
+	return 0;
+}
+
+
 static int cmd_d(char* args){
 	char* arg=strtok(NULL," ");
 	int NO;
@@ -311,41 +354,6 @@ static int cmd_b(char* args){
 }
 
 
-
-static int cmd_bt(char*args){
-	PartOfStackFrame cur_ebp;
-	swaddr_t addr=reg_l(R_EBP);
-	cur_ebp.ret_addr=addr;
-	
-	int j=0;
-	while(addr > 0)
-	{
-		//print the begining address
-		printf("#%d	0x%08x in ",j++, cur_ebp.ret_addr);
-		
-		int flag=search_addr(cur_ebp.ret_addr);
-
-		//read PartofStackFrame member
-		current_sreg = R_SS;
-		//read current address
-		cur_ebp.prev_ebp = swaddr_read(addr,4);
-		//read return address
-		cur_ebp.ret_addr = swaddr_read(addr+4,4);
-		int i;
-		//read four parameter
-		for(i=0;i<5;i++)
-		{
-			cur_ebp.args[i] = swaddr_read(addr+8+4*i,4);
-		}
-		
-		if (flag == 1)
-			printf ("( )\n");
-		else 
-			printf ("( %d , %d , %d , %d )\n", cur_ebp.args[0],cur_ebp.args[1],cur_ebp.args[2],cur_ebp.args[3]);
-		addr = cur_ebp.prev_ebp;
-	}
-	return 0;
-}
 
 
 
