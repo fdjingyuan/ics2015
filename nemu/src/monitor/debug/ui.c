@@ -8,6 +8,15 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+//define a new struct to describe the stack
+//every member should be read by function swaddr_read()
+typedef struct{
+	swaddr_t prev_ebp;
+	swaddr_t ret_addr;
+	uint32_t args[4];
+}PartOfStackFrame;
+
+
 void cpu_exec(uint32_t);
 
 /* We use the ``readline'' library to provide more flexibility to read from stdin. */
@@ -54,6 +63,8 @@ static int cmd_d(char *args);
 
 static int cmd_b(char *args);
 
+static int cmd_bt(char *args);
+
  
  //the definition of the cmd_table
 static struct {
@@ -71,6 +82,7 @@ static struct {
 	{ "w", "Set new watchpoint", cmd_w },
 	{ "d", "Delete watchpoint", cmd_d },
 	{ "b", "Set new breakpoint", cmd_b },
+	{ "bt", "Print the stack frame chain", cmd_bt},
 	/* TODO: Add more commands */
 
 };
@@ -293,6 +305,24 @@ static int cmd_b(char* args){
 	
 	return 0;
 }
+
+static int cmd_bt(char*args){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
 
 
 void ui_mainloop() {
