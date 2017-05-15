@@ -3,6 +3,7 @@
 #include "cpu/reg.h"
 #include "monitor/watchpoint.h"
 #include "nemu.h"
+#include "monitor/elf.h"
 
 #include <stdlib.h>
 #include <readline/readline.h>
@@ -11,8 +12,11 @@
 //define a new struct to describe the stack
 //every member should be read by function swaddr_read()
 typedef struct{
+	//next point: address of user
 	swaddr_t prev_ebp;
+	//address of return 
 	swaddr_t ret_addr;
+	//the parameter of function
 	uint32_t args[4];
 }PartOfStackFrame;
 
@@ -306,22 +310,43 @@ static int cmd_b(char* args){
 	return 0;
 }
 
+
+
 static int cmd_bt(char*args){
+	PartOfStackFrame cur_ebp;
+	swaddr_t addr=reg_l(R_EBP);
+	cur_ebp.ret_addr=addr;
+	
+	int j=0;
+	while(addr > 0)
+	{
+		//print the begining address
+		printf("#%d	0x%08x in ",j++, cur_ebp.ret_addr);
+		
+		int flag=search_addr(cur_ebp.ret_addr);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+		//read PartofStackFrame member
+		current_sreg = R_SS;
+		//read current address
+		cur_ebp.prev_ebp = swaddr_read(addr,4);
+		//read return address
+		cur_ebp.ret_addr = swaddr_read(addr+4,4);
+		int i;
+		//read four parameter
+		for(i=0;i<5;i++)
+		{
+			cur_ebp.args[i] = swaddr_read(addr+8+4*i,4);
+		}
+		
+		if (flag == 1)
+			printf ("( )\n");
+		else 
+			printf ("( %d , %d , %d , %d )\n", cur_ebp.args[0],cur_ebp.args[1],cur_ebp.args[2],cur_ebp.args[3]);
+		addr = cur_ebp.prev_ebp;
+	}
+	return 0;
 }
+
 
 
 

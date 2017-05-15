@@ -3,5 +3,6 @@
 
 
 swaddr_t search_var_name(char *);
+int search_addr(swaddr_t );
 
 #endif

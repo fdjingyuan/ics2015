@@ -116,3 +116,29 @@ swaddr_t search_var_name(char *str){
 		}
 		return 0;
 }
+
+int search_addr(swaddr_t addr)
+{
+	int i;
+	char tmp[32];
+	int tmplen; 
+	for (i=0;i<nr_symtab_entry;i++)
+		{
+			if (symtab[i].st_value <=addr && symtab[i].st_value +  symtab[i].st_size >= addr && (symtab[i].st_info&0xf) == STT_FUNC)
+			{
+				tmplen = symtab[i+1].st_name - symtab[i].st_name - 1;
+				strncpy (tmp,strtab+symtab[i].st_name,tmplen);
+				tmp [tmplen] = '\0';
+				break;
+			}
+		}
+		printf("%s\t",tmp);
+		if (strcmp (tmp,"main") == 0)
+			return 1;
+		else 
+			return 0;
+}
+
+
+
+
