@@ -204,7 +204,8 @@ uint32_t eval(uint32_t p,uint32_t q){
 		}
 		if(tokens[q].type==VAR)
 		{
-			n=search_var_name(tokens[q].str);
+			swaddr_t addr=search_var_name(tokens[q].str);
+			n=swaddr_read(addr,4);
 		}
 	
 		return n;

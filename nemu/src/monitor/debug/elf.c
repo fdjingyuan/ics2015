@@ -96,7 +96,7 @@ void load_elf_tables(int argc, char *argv[]) {
 
 
 //find the length of the variable
-uint32_t search_var_name(char *str){ 
+swaddr_t search_var_name(char *str){ 
 		int i;
 		for(i=0;i<nr_symtab_entry;i++)
 		{
