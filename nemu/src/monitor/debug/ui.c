@@ -255,7 +255,7 @@ static int cmd_w(char* args){
 }
 
 
-static int cmd_bt(char*args){
+static int cmd_bt(char* args){
 	PartOfStackFrame cur_ebp;
 	swaddr_t addr=reg_l(R_EBP);
 	cur_ebp.ret_addr=addr;
