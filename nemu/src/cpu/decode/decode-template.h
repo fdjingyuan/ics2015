@@ -8,10 +8,12 @@
 #define decode_a concat(decode_a_, SUFFIX)
 #define decode_r2rm concat(decode_r2rm_, SUFFIX)
 
+//add for leave instructions
 make_helper(concat(decode_n_, SUFFIX)) {
-	op_src->type = OP_TYPE_NO;
+	op_src->type = OP_TYPE_NO;//add type in: operand.h
 	return 0;
 }
+
 /* Ib, Iv */
 make_helper(concat(decode_i_, SUFFIX)) {
 	/* eip here is pointing to the immediate */

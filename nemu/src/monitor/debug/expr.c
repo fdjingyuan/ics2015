@@ -12,6 +12,7 @@ enum {
 	EQ,NEQ, AND, OR, 
 	DEREF,NEG,NOT,
 	REG, INT_d, INT_x,
+	VAR,
 
 
 	/* TODO: Add more token types */
@@ -44,6 +45,8 @@ static struct rule {
 	{"\\$[a-z]+", REG},				//register	eg:$eax
 	{"0x[0-9a-fA-F]+", INT_x},			//hexadecimal number
 	{"[0-9]+", INT_d},				//decimal number
+	{"[a-zA-Z_][a-zA-Z0-9_]*", VAR}			//variable	
+	//* means:repeat 0 times or more 
 
 };
 
