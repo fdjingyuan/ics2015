@@ -266,12 +266,12 @@ static int cmd_bt(char* args){
 		//print the begining address
 		printf("#%d	0x%08x in ",j++, cur_ebp.ret_addr);
 		
-		printf("call flags\n");
+		//printf("call flags\n");
 		int flag=search_addr(cur_ebp.ret_addr);
 
 		//read PartofStackFrame member
 		current_sreg = R_SS;
-		printf("current_sreg\n");
+		//printf("current_sreg\n");
 		//read current address
 		cur_ebp.prev_ebp = swaddr_read(addr,4);
 		//read return address
@@ -282,12 +282,12 @@ static int cmd_bt(char* args){
 		{
 			cur_ebp.args[i] = swaddr_read(addr+8+4*i,4);
 		}
-		printf("read\n");
+		//printf("read\n");
 		if (flag == 1)
 			printf ("( )\n");
 		else 
 			printf ("( %d , %d , %d , %d )\n", cur_ebp.args[0],cur_ebp.args[1],cur_ebp.args[2],cur_ebp.args[3]);
-		printf("printf\n");
+		//printf("printf\n");
 		addr = cur_ebp.prev_ebp;
 	}
 	return 0;
