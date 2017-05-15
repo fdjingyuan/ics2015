@@ -258,7 +258,7 @@ static int cmd_w(char* args){
 static int cmd_bt(char* args){
 	PartOfStackFrame cur_ebp;
 	swaddr_t addr=reg_l(R_EBP);
-	cur_ebp.ret_addr=addr;
+	cur_ebp.ret_addr=cpu.eip;
 	
 	int j=0;
 	while(addr > 0)
@@ -278,7 +278,7 @@ static int cmd_bt(char* args){
 		cur_ebp.ret_addr = swaddr_read(addr+4,4);
 		int i;
 		//read four parameter
-		for(i=0;i<5;i++)
+		for(i=0;i<4;i++)
 		{
 			cur_ebp.args[i] = swaddr_read(addr+8+4*i,4);
 		}
