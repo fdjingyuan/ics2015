@@ -7,6 +7,7 @@
 #include <regex.h>
 #include <stdlib.h>
 
+
 enum {
 	NOTYPE = 256, 
 	EQ,NEQ, AND, OR, 
@@ -102,14 +103,12 @@ static bool make_token(char *e) {
 		/* Try all rules one by one. */
 		for(i = 0; i < NR_REGEX; i ++) {
 				//debug:printf("i=%d,NR_REGEX=%lu\n",i,NR_REGEX);
-			if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
-				
+			if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {			
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 				//debug:printf("start=%c,len=%d\n",*substr_start,substr_len);
 
 				//Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
-				position += substr_len;
 
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
 				 * to record the token in the array ``tokens''. For certain 
@@ -117,21 +116,7 @@ static bool make_token(char *e) {
 				 */
 
 				switch(rules[i].token_type) {
-					case NOTYPE:break;
-					case INT_x:
-						tokens[nr_token].type = rules[i].token_type;
-						//copy substr_len byte to the memory that tokens indicate
-						memcpy(tokens[nr_token].str,substr_start,substr_len);
-						//debug:printf("tokens[nr_token].str=%s",tokens[nr_token].str);
-						nr_token++;
-						break;
-					case INT_d:
-						assert(substr_len<32);
-						tokens[nr_token].type = rules[i].token_type;
-						memcpy(tokens[nr_token].str,substr_start,substr_len);
-						//debug:printf("tokens[nr_token].str=%s",tokens[nr_token].str);
-						nr_token++;
-						break;
+					case NOTYPE:break;				
 					case REG:
 						tokens[nr_token].type = rules[i].token_type;
 						//remove $
@@ -153,23 +138,15 @@ static bool make_token(char *e) {
 								nr_token++;
 								break;
 						}	
-					case '+':
-					case '/':
-					case '(':
-					case ')':
-					case EQ:
-					case NEQ:
-					case AND:
-					case OR:
-					case NOT:
-						 tokens[nr_token].type = rules[i].token_type;
-						 //printf("token op:%d\n",tokens[nr_token].type);
-						 nr_token++;
-						 break;
-
-					default: panic("please implement me");
+					default:
+						tokens[nr_token].type = rules[i].token_type;
+						//copy substr_len byte to the memory that tokens indicate
+						memcpy(tokens[nr_token].str,substr_start,substr_len);
+						//debug:printf("tokens[nr_token].str=%s",tokens[nr_token].str);
+						nr_token++;
+						break;
 				}
-
+				position += substr_len;
 				break;
 			}
 		}
@@ -184,6 +161,8 @@ static bool make_token(char *e) {
 	return true; 
 }
 
+
+
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
 		*success = false;
@@ -193,6 +172,8 @@ uint32_t expr(char *e, bool *success) {
 	/* TODO: Insert codes to evaluate the expression. */
 	return eval(0,nr_token-1);
 }
+
+
 
 uint32_t eval(uint32_t p,uint32_t q){
 	if (p>q)
@@ -204,9 +185,9 @@ uint32_t eval(uint32_t p,uint32_t q){
 		uint32_t n;
 		if(tokens[q].type==INT_x)
 			n = strtoull(tokens[q].str,NULL,16);
-		else if(tokens[q].type==INT_d) 
+		if(tokens[q].type==INT_d) 
 			sscanf(tokens[q].str, "%d", &n);
-		else
+		if(tokens[q].type==REG)
 		{
 			if(strcmp("eip",tokens[q].str)==0)
 				return cpu.eip;
@@ -220,7 +201,24 @@ uint32_t eval(uint32_t p,uint32_t q){
 			}
 			panic("error:reg cannot be find\n");
 		}
-		return n;
+		if(tokens[q].type==VAR)
+		{
+			int i;
+			for(i=0;i<nr_symtab_enrty;i++)
+			{
+				if((symtab[i].st_info & 0xf)==STT_OBJECT)
+				{
+					char var_name[32];
+					//the length of variable
+					int var_name_len = symtab[i+1].st_name - symtab[i].st_name -1;
+					strncpy (var_name, strtab+symtab[i].st_name, var_name_len);
+					var_name[var_name_len]= '\0';
+					if(strcmp(var_name, tokens[q].str)==0)
+						n = symtab[i].st_value;
+				}
+			}
+		}
+		return n;//
 	}
 	//the expression is surrounded by a matched pair of parentheses
 	else if(check_parentheses(p,q) == true)
@@ -245,7 +243,6 @@ uint32_t eval(uint32_t p,uint32_t q){
 		uint32_t val2=eval(op+1,q);
 		//printf("val1=%d val2=%d\n",val1,val2);
 
-
 		switch(tokens[op].type)
 		{
 			case '+':return val1+val2;
@@ -260,7 +257,6 @@ uint32_t eval(uint32_t p,uint32_t q){
 		}
 		}
 	}
-
 }
 
 
@@ -283,9 +279,9 @@ bool check_parentheses(uint32_t p,uint32_t q){
 	}
 	if(pars == 0)
 		return true;
-
 	return false;//'(' is more than ')'
 }
+
 
 uint32_t dominOp(uint32_t p, uint32_t q){
 	//  NEG:2 / *:3; +,-:4; ==,!=:7; &&:11; ||:12; 	
@@ -295,7 +291,7 @@ uint32_t dominOp(uint32_t p, uint32_t q){
 	for(;p<=q;p++)
 	{
 		//skip numbers, register and monocular operator
-		if(tokens[p].type == INT_d || tokens[p].type == INT_x || tokens[p].type == NOT || tokens[p].type == DEREF || tokens[p].type == REG || tokens[p].type == NEG)
+		if(tokens[p].type == INT_d || tokens[p].type == INT_x || tokens[p].type == NOT || tokens[p].type == DEREF || tokens[p].type == REG || tokens[p].type == NEG || tokens[p] == VAR)
 			continue;
 		else if(tokens[p].type == '(')
 		{
@@ -361,7 +357,6 @@ uint32_t dominOp(uint32_t p, uint32_t q){
 		}
 	}
 	return op;
-	
 
 }
 

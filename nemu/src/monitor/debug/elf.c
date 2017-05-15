@@ -4,9 +4,19 @@
 
 char *exec_file = NULL;
 
-static char *strtab = NULL;
-static Elf32_Sym *symtab = NULL;
-static int nr_symtab_entry;
+static char *strtab = NULL;// the table of string
+static Elf32_Sym *symtab = NULL;// the table of symble
+/*
+typedef struct{
+	uint32_t 		st_name;
+	Elf32_Addr 	st_value;
+	uint32_t 		st_size;
+	unsigned char	st_info;
+	unsigned char st_other;
+	uint16_t		st_shndx;
+}Elf32_Sym;
+*/
+static int nr_symtab_entry;//the number of the table
 
 void load_elf_tables(int argc, char *argv[]) {
 	int ret;
