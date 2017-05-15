@@ -6,6 +6,8 @@ char *exec_file = NULL;
 
 static char *strtab = NULL;// the table of string
 static Elf32_Sym *symtab = NULL;// the table of symble
+static int nr_symtab_entry;//the number of the table
+
 /*
 typedef struct{
 	uint32_t 		st_name;
@@ -16,29 +18,6 @@ typedef struct{
 	uint16_t		st_shndx;
 }Elf32_Sym;
 */
-static int nr_symtab_entry;//the number of the table
-
-//find the length of the variable
-uint32_t var_name(char *str){ 
-		int i;
-		for(i=0;i<nr_symtab_enrty;i++)
-		{
-			//only care the type of object
-			if((symtab[i].st_info & 0xf)==STT_OBJECT)
-				{
-					char var_name[32];
-					//the length of variable
-					int var_name_len = symtab[i+1].st_name - symtab[i].st_name -1;
-					//copy the name to var_name
-					strncpy (var_name, strtab+symtab[i].st_name, var_name_len);
-					var_name[var_name_len]= '\0';
-					//compare the name and the tokens[q].str
-					if(strcmp(var_name, str)==0)
-						return symtab[i].st_value;
-				}
-		}
-}
-
 
 
 
@@ -115,3 +94,25 @@ void load_elf_tables(int argc, char *argv[]) {
 	fclose(fp);
 }
 
+
+//find the length of the variable
+uint32_t search_var_name(char *str){ 
+		int i;
+		for(i=0;i<nr_symtab_entry;i++)
+		{
+			//only care the type of object
+			if((symtab[i].st_info & 0xf)==STT_OBJECT)
+				{
+					char var_name[32];
+					//the length of variable
+					int var_name_len = symtab[i+1].st_name - symtab[i].st_name -1;
+					//copy the name to var_name
+					strncpy (var_name, strtab+symtab[i].st_name, var_name_len);
+					var_name[var_name_len]= '\0';
+					//compare the name and the tokens[q].str
+					if(strcmp(var_name, str)==0)
+						return symtab[i].st_value;
+				}
+		}
+		return 0;
+}

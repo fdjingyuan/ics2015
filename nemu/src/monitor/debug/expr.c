@@ -1,5 +1,6 @@
 #include "nemu.h"
 #include "common.h"
+#include "monitor/elf.h"
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
@@ -173,7 +174,7 @@ uint32_t expr(char *e, bool *success) {
 	return eval(0,nr_token-1);
 }
 
-
+//uint32_t search_var_name(char *);
 
 uint32_t eval(uint32_t p,uint32_t q){
 	if (p>q)
@@ -203,10 +204,10 @@ uint32_t eval(uint32_t p,uint32_t q){
 		}
 		if(tokens[q].type==VAR)
 		{
-			//call function in elf.c
-			n = var_name(tokens[q].str);
+			n=search_var_name(tokens[q].str);
 		}
-		return n;//
+	
+		return n;
 	}
 	//the expression is surrounded by a matched pair of parentheses
 	else if(check_parentheses(p,q) == true)
@@ -279,7 +280,7 @@ uint32_t dominOp(uint32_t p, uint32_t q){
 	for(;p<=q;p++)
 	{
 		//skip numbers, register and monocular operator
-		if(tokens[p].type == INT_d || tokens[p].type == INT_x || tokens[p].type == NOT || tokens[p].type == DEREF || tokens[p].type == REG || tokens[p].type == NEG || tokens[p] == VAR)
+		if(tokens[p].type == INT_d || tokens[p].type == INT_x || tokens[p].type == NOT || tokens[p].type == DEREF || tokens[p].type == REG || tokens[p].type == NEG || tokens[p].type == VAR)
 			continue;
 		else if(tokens[p].type == '(')
 		{
