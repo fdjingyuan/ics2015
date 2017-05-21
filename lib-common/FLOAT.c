@@ -39,11 +39,24 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 }
 
 FLOAT f2F(float a) {
+	int b = *(int *) & a;
+	int sign = !!(b>>31);
+	int exp = (b>>23) & 0xff;
+	FLOAT res = b & 0x7fffff;
+
+	if(exp != 0)	res+=res <<23;
+	//bias 127,  23 bit
+	exp=exp-150;
+	if(exp < -16) res>>= -16 -exp;
+	if(exp > -16) res<<= 16 +exp;
 	
+	return sign == 0 ? res : -res;
 }
 
 FLOAT Fabs(FLOAT a) {
-	
+	if(a < 0)
+		a= -a;
+	return a;
 }
 
 FLOAT sqrt(FLOAT x) {
