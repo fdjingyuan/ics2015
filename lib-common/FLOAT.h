@@ -15,10 +15,12 @@ static inline FLOAT int2F(int a) {
 }
 
 static inline FLOAT F_mul_int(FLOAT a, int b) {
+	//special situation: can compute directly
 	return a*b;
 }
 
 static inline FLOAT F_div_int(FLOAT a, int b) {
+	//special situation: can compute directly
 	return a/b;
 }
 
