@@ -24,10 +24,26 @@
 
 
 #include "control/call.h"
-#include "control/je.h"
 #include "control/jmp.h"
-#include "control/jbe.h"
 #include "control/ret.h"
+
+#include "control/ja.h"
+#include "control/jae.h"
+#include "control/jb.h"
+#include "control/jbe.h"
+#include "control/je.h"
+#include "control/jne.h"
+#include "control/jg.h"
+#include "control/jge.h"
+#include "control/jl.h"
+#include "control/jle.h"
+#include "control/jo.h"
+#include "control/jno.h"
+#include "control/jp.h"
+#include "control/jnp.h"
+#include "control/js.h"
+#include "control/jns.h"
+
 
 #include "logic/and.h"
 #include "logic/or.h"
