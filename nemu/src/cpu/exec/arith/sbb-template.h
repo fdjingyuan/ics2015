@@ -12,10 +12,10 @@ static void do_execute() {
 	DATA_TYPE result = op_dest->val - src;
 	int len = (DATA_BYTE << 3) - 1;
 	cpu.CF = op_dest->val < src;
-	cpu.SF=result >> len;
+	cpu.SF=!!(result >> len);
     	int s1,s2;
-	s1=op_dest->val>>len;
-	s2=src>>len;
+	s1=!!(op_dest->val>>len);
+	s2=!!(src>>len);
     	cpu.OF=(s1 != s2 && s2 == cpu.SF) ;
     	cpu.ZF=!result;
     	OPERAND_W(op_dest, result);

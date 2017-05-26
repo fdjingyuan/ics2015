@@ -8,7 +8,7 @@ static void do_execute() {
 	//the sign bit
 	int s1,s2;
 	cpu.CF=(result < op_dest->val);
-	cpu.SF=result >> len;
+	cpu.SF=!!(result >> len);
 	s1=!!(op_dest->val>>len);
 	s2=!!(op_src->val>>len);
     	cpu.OF=(s1 == s2 && s1 != cpu.SF) ;

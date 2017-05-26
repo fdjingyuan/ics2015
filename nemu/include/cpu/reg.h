@@ -2,6 +2,7 @@
 #define __REG_H__
 
 #include "common.h"
+//#include "../../../lib-common/x86-inc/cpu.h"
 
 enum { R_EAX, R_ECX, R_EDX, R_EBX, R_ESP, R_EBP, R_ESI, R_EDI };
 enum { R_AX, R_CX, R_DX, R_BX, R_SP, R_BP, R_SI, R_DI };
@@ -18,7 +19,7 @@ enum { R_ES, R_CS, R_SS, R_DS, R_FS, R_GS };
 typedef struct {
 //GPRs
   	union{
-		union{
+			union{
 				uint32_t _32;
 				uint16_t _16;
 				uint8_t _8[2];
@@ -26,27 +27,25 @@ typedef struct {
 	
 	/* Do NOT change the order of the GPRs' definitions. */
 		
-		struct{
+			struct{
 				uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
-		      };
-              };
-	swaddr_t eip;
+		    swaddr_t eip;	
 	//flags
 	union
 	{
-		struct
-		{uint32_t
-		CF :1,
-		PF :1,
-		ZF :1,
-		SF :1,
-		IF :1,
-		DF :1,
-		OF :1;
-		};
-	uint32_t EFLAGS;
+		struct{
+		uint32_t CF :1,
+			PF :1,
+			ZF :1,
+			SF :1,
+			IF :1,
+			DF :1,
+			OF :1;
+			};
+		uint32_t EFLAGS;
 	};
-
+ };
+ };
 } CPU_state;
 
 extern CPU_state cpu;

@@ -6,7 +6,7 @@ static void do_execute() {
 	DATA_TYPE result = op_dest->val - op_src->val;
 	int len = (DATA_BYTE << 3) - 1;
 	cpu.CF = op_dest->val < op_src->val;
-	cpu.SF=result >> len;
+	cpu.SF=!!(result >> len);
     	int s1,s2;
 	s1=!!(op_dest->val>>len);
 	s2=!!(op_src->val>>len);

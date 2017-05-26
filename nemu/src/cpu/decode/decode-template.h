@@ -7,6 +7,7 @@
 #define decode_i concat(decode_i_, SUFFIX)
 #define decode_a concat(decode_a_, SUFFIX)
 #define decode_r2rm concat(decode_r2rm_, SUFFIX)
+#define decode_n concat(decode_n_,SUFFIX)
 
 //add for leave instructions
 make_helper(concat(decode_n_, SUFFIX)) {
@@ -78,6 +79,8 @@ static int concat(decode_a_, SUFFIX) (swaddr_t eip, Operand *op) {
 /* eXX: eAX, eCX, eDX, eBX, eSP, eBP, eSI, eDI */
 static int concat3(decode_r_, SUFFIX, _internal) (swaddr_t eip, Operand *op) {
 	op->type = OP_TYPE_REG;
+	//change
+	op->size = DATA_BYTE;
 	op->reg = ops_decoded.opcode & 0x7;
 	op->val = REG(op->reg);
 
