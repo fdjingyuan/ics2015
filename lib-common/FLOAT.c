@@ -1,65 +1,79 @@
 #include "FLOAT.h"
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
-	long long c = (long long) a * (long long) b;
-	return (FLOAT)(c>>16);
+	long long result = (long long)a * b;	
+	return result >> 16;
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
-	//1 means positive number
-	int sign = 1;
-	if(a < 0)
+	/* a<<16 */
+	long long la = a << 16;
+	
+	/*result = a/b*/
+	unsigned int result, temp, rel;
+	result = 0;
+	rel = 0xffffffff / b;
+	while (la > (long long)0xffffffff)
 	{
-		sign=-sign;
-		a=-a;
-	}
-	if(b < 0)
-	{
-		sign=-sign;
-		b=-b;
-	}
-	//the integer part of the result
-	int result = a / b;
-	//the decimal part of the result
-	a = a % b;
-	int i;
-	for(i = 0;i < 16; i++)
-	{
-		//extract the decimal part of the result, left shifting 
-		a=a<<1;
-		result=result<<1;
-		
-		if(a >= b)
-		{
-			a-=b;
-			result++;
-		}
-	}
-	return result * sign;
+		temp = la >> 32;
+		result += temp * rel;
+		la -= (long long)rel * b * temp;
+	}	
+
+	result += (unsigned)la / b;	
+	return  result;
 }
 
 FLOAT f2F(float a) {
-	int b = *(int *) & a;
-	int sign = !!(b>>31);
-	int exp = (b>>23) & 0xff;
-	FLOAT res = b & 0x7fffff;
-	//make up the omitted 1
-	if(exp != 0)	res+=res <<23;
-	//bias 127  
-	//left shift 23 bits to add the decimal point
-	exp=exp-150;
-	//when 16+exp < 0 , right shift
-	if(exp < -16) res>>= -16 -exp;
-	//when 16+exp >0 ,left shift
-	if(exp > -16) res<<= 16 +exp;
+// 0| 0000 0000|000 0000 0000 0000 0000 0000
+	int ieee_exp = *(int *)&a;
+	int sign = (ieee_exp >> 31) & 1;
+	int exp = ((ieee_exp >> 23) & 0xff) - 127;
+	int frac = ieee_exp & 0x7fffff;
+	/*
+	 * float a = 0.1frac * 2 ^ exp
+	 * FLOAT A = a * 2 ^ 16 
+	 *		   = 0.1frac * 2 ^(16 + exp)
+	 *		   = 1frac * 2 ^(16 - 24 + exp)
+	 *		   = 1frac * 2 ^(exp - 8)
+i	 * */
+
+
+
+	int result;
+
+	//alert(exp <= 15);
+
+	if (exp > 8)
+		result = ((1 << 23) + frac) << (exp - 8);
+	else
+		result = ((1 << 23) + frac) >> (8 - exp);
+
+
+/*
+	int temp = 24 - exp;
+	//overflow assertion	
+
+	int result;
 	
-	return sign == 0 ? res : -res;
+	if (temp <= 17)
+		result = ((1 << 23) + frac) << (17 - temp);
+	else
+		result = ((1 << 23) + frac) >> (temp - 17);
+
+*/
+	if (sign) result = -result;
+	return result;
 }
 
 FLOAT Fabs(FLOAT a) {
-	if(a < 0)
-		a= -a;
-	return a;
+	//set_bp();
+	int sign = a >> 31;
+		
+	if (sign == -1) 
+		return a;
+	else
+		return -a;
 }
 
 FLOAT sqrt(FLOAT x) {
@@ -69,6 +83,7 @@ FLOAT sqrt(FLOAT x) {
 		dt = F_div_int((F_div_F(x, t) - t), 2);
 		t += dt;
 	} while(Fabs(dt) > f2F(1e-4));
+
 
 	return t;
 }
@@ -85,4 +100,5 @@ FLOAT pow(FLOAT x, FLOAT y) {
 
 	return t;
 }
+
 
