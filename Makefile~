@@ -52,8 +52,8 @@ clean: clean-cpp
 
 ##### some convinient rules #####
 
-USERPROG = obj/testcase/wanshu
-ENTRY = $(USERPROG)
+USERPROG = obj/testcase/hello-inline-asm
+ENTRY = $()
 
 entry: $(ENTRY)
 	objcopy -S -O binary $(ENTRY) entry
