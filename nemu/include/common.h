@@ -6,6 +6,9 @@
 /* You will define this macro in PA4 */
 //#define HAS_DEVICE
 
+/*ANSWER:*/
+volatile static int dummy;
+
 #define DEBUG
 #define LOG_FILE
 
@@ -35,6 +38,6 @@ typedef union {
 #define false 0
 #define true 1
 
-volatile static int dummy;
+
 
 #endif
