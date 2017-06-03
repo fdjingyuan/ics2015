@@ -7,7 +7,7 @@
 extern FILE* log_fp;
 
 /* ANSWER:*/
-volatile static int dummy; 
+//volatile static int dummy; 
 
 
 
